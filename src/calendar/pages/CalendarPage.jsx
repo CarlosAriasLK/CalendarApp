@@ -21,7 +21,7 @@ const events = [{
 
 export const CalendarPage = () => {
   
-  const [view, setView] = useState('month');
+  const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month' );
   const [date, setDate] = useState(new Date());
 
   const eventStyleGetter = ( event, start, end, isSlected ) => {
@@ -38,6 +38,19 @@ export const CalendarPage = () => {
     }
   }
 
+  const onDoubleClik = (event) => {
+    console.log({ doubleClik: event});
+  }
+
+  const onSelect = (event) => {
+    console.log({ click: event});
+  }
+
+  const onViewChange = (event) => {
+    localStorage.setItem( 'lastView', event );
+    setLastView( event );
+  }
+
   return (
     <>
       <Navbar />
@@ -46,6 +59,7 @@ export const CalendarPage = () => {
         culture='es'
         localizer={ localizer }
         events={ events }
+        defaultView={ lastView }
         startAccessor="start"
         endAccessor="end"
         style={{ padding: '50px', height: 'calc( 100vh - 80px )' }}
@@ -54,8 +68,13 @@ export const CalendarPage = () => {
         components={{
           event: CalendarEvent,
         }}
-        view={view}
-        onView={setView}
+        onDoubleClickEvent={ onDoubleClik }
+        onSelectEvent={ onSelect }
+        onView={ onViewChange }
+
+
+
+        view={ lastView }
         date={date}
         onNavigate={setDate}
       />
