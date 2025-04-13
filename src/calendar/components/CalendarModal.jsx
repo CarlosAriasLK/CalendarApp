@@ -1,43 +1,126 @@
-import { useState } from "react";
-import Modal from "react-modal"
+import { addHours } from 'date-fns';
+import { useState } from 'react';
 
+import Modal from 'react-modal'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-    const customStyles = {
-        content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-        },
-    };
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+    },
+};
 
-    Modal.setAppElement('#root');
+Modal.setAppElement('#root');
 
 
 export const CalendarModal = () => {
 
     const [isOpen, setIsOpen] = useState(true);
+    const [formValues, setFormValues] = useState({
+        title: 'Carlos Arias',
+        notes: 'Notas',
+        start: new Date(),
+        end: addHours( new Date(), 2 ),
+    })
+
+    const onInputChange = ({ target }) => {
+
+        setFormValues({
+            ...formValues,
+            [target.name]: target.value
+        })
+    }
+
 
     const onCloseModal = () => {
         console.log('Cerrando Modal');
-        setIsOpen( false );
+        setIsOpen(false);
+    }
+
+    const onDateChange = ( event, changing ) => {
+        setFormValues({
+            ...formValues,
+            [changing]: event
+        })
     }
 
     return (
         <Modal
-            isOpen={ isOpen }
-            onRequestClose={ onCloseModal }
-            style={ customStyles }
+            isOpen={isOpen}
+            onRequestClose={onCloseModal}
+            style={customStyles}
             className='modal'
             overlayClassName='modal-fondo'
-            closeTimeoutMS={ 200 }
+            closeTimeoutMS={200}
         >
-            <h1>Hola mundo</h1>
+            <h1> Nuevo evento </h1>
             <hr />
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quae dolor vitae error ipsum architecto tempore ducimus, eum fugiat totam nesciunt a repellat laborum aliquid facilis consequatur tempora consectetur aliquam.</p>
+            <form className="container">
 
+                <div className="form-group mb-2">
+                    <label className="d-block mb-1">Fecha y hora inicio</label>
+                    <DatePicker 
+                        selected={ formValues.start }
+                        onChange={ (e) => onDateChange( e, 'start' ) }
+                        className='form-control'
+                        dateFormat='Pp'
+                    />
+                </div>
+
+                <div className="form-group mb-2">
+                    <label className="d-block mb-1">Fecha y hora fin</label>
+                    <DatePicker 
+                        minDate={ formValues.start }
+                        selected={ formValues.end }
+                        onChange={ (e) => onDateChange( e, 'end' ) }
+                        className='form-control'
+                        dateFormat='Pp'
+                    />
+                </div>
+
+                <hr />
+                <div className="form-group mb-2">
+                    <label>Titulo y notas</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Título del evento"
+                        name="title"
+                        autoComplete="off"
+                        value={ formValues.title }
+                        onChange={ onInputChange }
+                    />
+                    <small id="emailHelp" className="form-text text-muted">Una descripción corta</small>
+                </div>
+
+                <div className="form-group mb-2">
+                    <textarea
+                        type="text"
+                        className="form-control"
+                        placeholder="Notas"
+                        rows="5"
+                        name="notes"
+                        value={ formValues.notes }
+                        onChange={ onInputChange }
+                    ></textarea>
+                    <small id="emailHelp" className="form-text text-muted">Información adicional</small>
+                </div>
+
+                <button
+                    type="submit"
+                    className="btn btn-outline-primary btn-block"
+                >
+                    <i className="far fa-save"></i>
+                    <span> Guardar</span>
+                </button>
+
+            </form>
         </Modal>
     )
 }
