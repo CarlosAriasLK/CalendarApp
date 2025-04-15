@@ -1,5 +1,6 @@
+import { useState, useMemo } from 'react';
 import { addHours, differenceInSeconds } from 'date-fns';
-import { useState } from 'react';
+
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
@@ -7,8 +8,9 @@ import Modal from 'react-modal';
 
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
 import es from 'date-fns/locale/es';
-import { useMemo } from 'react';
+import { useUiStore } from '../../hooks/useUiStore';
 
 registerLocale( 'es', es );
 
@@ -28,7 +30,8 @@ Modal.setAppElement('#root');
 
 export const CalendarModal = () => {
 
-    const [isOpen, setIsOpen] = useState(true);
+    const { isDateModalOpen, closeDateModal } = useUiStore();
+
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const [formValues, setFormValues] = useState({
@@ -38,6 +41,7 @@ export const CalendarModal = () => {
         end: addHours( new Date(), 2 ),
     });
 
+    
     const titleClass = useMemo(() => {
         if ( !formSubmitted ) return '';
 
@@ -47,17 +51,17 @@ export const CalendarModal = () => {
 
     }, [ formValues.title, formSubmitted ])
 
-    const onInputChange = ({ target }) => {
 
+
+    const onInputChange = ({ target }) => {
         setFormValues({
             ...formValues,
             [target.name]: target.value
         })
     }
-
+    
     const onCloseModal = () => {
-        console.log('Cerrando Modal');
-        setIsOpen( false );
+        closeDateModal();
     }
 
     const onDateChange = ( event, changing ) => {
@@ -91,7 +95,7 @@ export const CalendarModal = () => {
 
     return (
         <Modal
-            isOpen={ isOpen }
+            isOpen={ isDateModalOpen }
             onRequestClose={ onCloseModal }
             style={ customStyles }
             className='modal'

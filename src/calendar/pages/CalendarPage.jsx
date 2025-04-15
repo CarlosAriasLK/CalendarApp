@@ -6,6 +6,7 @@ import { CalendarEvent, CalendarModal, Navbar } from "../"
 
 import { localizer, getMessageES } from '../../helpers';
 import { useState } from 'react';
+import { useUiStore } from '../../hooks';
 
 const events = [{
   title: 'Cumpleaños del jefe',
@@ -21,6 +22,7 @@ const events = [{
 
 export const CalendarPage = () => {
   
+  const { openDateModal } = useUiStore();
   const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month' );
   const [date, setDate] = useState(new Date());
 
@@ -38,8 +40,8 @@ export const CalendarPage = () => {
     }
   }
 
-  const onDoubleClik = (event) => {
-    console.log({ doubleClik: event});
+  const onDoubleClik = () => {
+    openDateModal();
   }
 
   const onSelect = (event) => {
