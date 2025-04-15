@@ -2,8 +2,11 @@ import { addHours } from 'date-fns';
 import { useState } from 'react';
 
 import Modal from 'react-modal'
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import es from 'date-fns/locale/es';
+
+registerLocale( 'es', es );
 
 const customStyles = {
     content: {
@@ -37,10 +40,9 @@ export const CalendarModal = () => {
         })
     }
 
-
     const onCloseModal = () => {
         console.log('Cerrando Modal');
-        setIsOpen(false);
+        setIsOpen( false );
     }
 
     const onDateChange = ( event, changing ) => {
@@ -52,12 +54,12 @@ export const CalendarModal = () => {
 
     return (
         <Modal
-            isOpen={isOpen}
-            onRequestClose={onCloseModal}
-            style={customStyles}
+            isOpen={ isOpen }
+            onRequestClose={ onCloseModal }
+            style={ customStyles }
             className='modal'
             overlayClassName='modal-fondo'
-            closeTimeoutMS={200}
+            closeTimeoutMS={ 200 }
         >
             <h1> Nuevo evento </h1>
             <hr />
@@ -70,6 +72,9 @@ export const CalendarModal = () => {
                         onChange={ (e) => onDateChange( e, 'start' ) }
                         className='form-control'
                         dateFormat='Pp'
+                        showTimeSelect
+                        locale='es'
+                        timeCaption='Hora'
                     />
                 </div>
 
@@ -81,6 +86,9 @@ export const CalendarModal = () => {
                         onChange={ (e) => onDateChange( e, 'end' ) }
                         className='form-control'
                         dateFormat='Pp'
+                        showTimeSelect
+                        locale='es'
+                        timeCaption='Hora'
                     />
                 </div>
 
