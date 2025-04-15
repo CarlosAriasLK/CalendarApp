@@ -1,4 +1,4 @@
-import { addHours } from 'date-fns';
+import { addHours, differenceInSeconds } from 'date-fns';
 import { useState } from 'react';
 
 import Modal from 'react-modal'
@@ -25,6 +25,7 @@ Modal.setAppElement('#root');
 export const CalendarModal = () => {
 
     const [isOpen, setIsOpen] = useState(true);
+
     const [formValues, setFormValues] = useState({
         title: 'Carlos Arias',
         notes: 'Notas',
@@ -52,6 +53,27 @@ export const CalendarModal = () => {
         })
     }
 
+
+
+    const onSubmit = ( e ) => {
+        e.preventDefault();
+
+        const difference = differenceInSeconds( formValues.end, formValues.start );
+
+        if ( isNaN( difference ) || difference <= 0 ) {
+            console.log('Error en fechas');
+            return;
+        }
+
+        if ( formValues.title.length <= 0 ) return;
+
+        console.log(formValues);
+
+        // Cerrar Modal
+        // Remover errores en pantalla
+    }
+
+
     return (
         <Modal
             isOpen={ isOpen }
@@ -63,7 +85,7 @@ export const CalendarModal = () => {
         >
             <h1> Nuevo evento </h1>
             <hr />
-            <form className="container">
+            <form className="container" onSubmit={ onSubmit }>
 
                 <div className="form-group mb-2">
                     <label className="d-block mb-1">Fecha y hora inicio</label>
