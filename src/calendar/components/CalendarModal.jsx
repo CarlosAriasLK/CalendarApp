@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
-import Modal from 'react-modal'
+import Modal from 'react-modal';
 
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
